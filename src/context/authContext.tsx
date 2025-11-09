@@ -37,8 +37,6 @@ export const AuthContextProvider: React.FC<AuthProviderProps> = ({
 }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  
-  
 
   const checkAuth = async () => {
     try {
@@ -49,7 +47,8 @@ export const AuthContextProvider: React.FC<AuthProviderProps> = ({
         setCurrentUser(null);
       }
     } catch (error) {
-      if (import.meta.env.DEV) console.log("User not authenticated");
+      console.log("Error : ", error);
+
       setCurrentUser(null);
     } finally {
       setIsLoading(false);

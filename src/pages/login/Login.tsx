@@ -48,7 +48,7 @@ const Login: React.FC = () => {
         withCredentials: true,
       });
 
-      if (import.meta.env.DEV) console.log("Login success:", response.data);
+      // if (import.meta.env.DEV) console.log("Login success:", response.data);
 
       await checkAuth(); // ensure context updates
       navigate("/");
