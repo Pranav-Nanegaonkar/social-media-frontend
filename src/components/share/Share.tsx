@@ -8,7 +8,6 @@ import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { makeRequest } from "../../utils/axios";
 import { uploadImage } from "../../utils/upload";
 
-
 const Share = () => {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -65,7 +64,7 @@ const Share = () => {
             <img
               src={
                 currentUser?.profilePic
-                  ? `/uploads/${currentUser.profilePic}`
+                  ? currentUser.profilePic
                   : "/uploads/boy.png"
               }
               alt={currentUser?.name}

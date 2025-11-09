@@ -39,7 +39,6 @@ const Post: React.FC<PostProps> = ({ post }) => {
     staleTime: 1000 * 60 * 5,
   });
 
-
   const mutation = useMutation({
     mutationFn: async (liked: boolean) => {
       if (liked) {
@@ -84,7 +83,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
 
         <div className="content">
           <p>{post.desc}</p>
-          {post.img && <img src={`/uploads/${post.img}`} alt="Post" />}
+          {post.img && <img src={post.img} alt="Post" />}
         </div>
 
         <div className="info">
