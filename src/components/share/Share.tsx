@@ -6,13 +6,8 @@ import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../context/authContext";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { makeRequest } from "../../utils/axios";
+import { uploadImage } from "../../utils/upload";
 
-const upload = async (file: File): Promise<string> => {
-  const formData = new FormData();
-  formData.append("file", file);
-  const res = await makeRequest.post("/upload", formData);
-  return res.data.fileUrl || res.data; // ensure backend returns string path
-};
 
 const Share = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -44,7 +39,7 @@ const Share = () => {
 
     if (file) {
       try {
-        img = await upload(file);
+        img = await uploadImage(file);
       } catch (error) {
         console.error("Upload failed:", error);
         return;

@@ -24,17 +24,6 @@ const Update: React.FC<UpdateProps> = ({ setOpenUpdate, user }) => {
 
   const { checkAuth } = useContext(AuthContext);
 
-  // const upload = async (file: File) => {
-  //   console.log(file);
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append("file", file);
-  //     const res = await makeRequest.post("/upload", formData);
-  //     return res.data;
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
