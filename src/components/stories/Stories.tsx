@@ -35,7 +35,7 @@ const Stories: React.FC = () => {
         <img
           src={
             currentUser?.profilePic
-              ? `/uploads/${currentUser.profilePic}`
+              ? currentUser.profilePic
               : "/uploads/boy.png"
           }
           alt=""
