@@ -18,18 +18,21 @@ interface PostProps {
 
 const Post: React.FC<PostProps> = ({ post }) => {
   const [commentOpen, setCommentOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false); // 🔹 NEW state
   const { currentUser } = useContext(AuthContext);
   const queryClient = useQueryClient();
 
+  // Likes Query
   const { isPending: loadingLikes, data: likes = [] } = useQuery({
     queryKey: ["likes", post.id],
     queryFn: async () => {
       const res = await makeRequest.get(`/like?postid=${post.id}`);
-      return res.data.data; // assuming array of userIds
+      return res.data.data;
     },
     staleTime: 1000 * 60 * 5,
   });
 
+  // Comments Query
   const { isPending: loadingComments, data: comments = [] } = useQuery({
     queryKey: ["comments", post.id],
     queryFn: async () => {
@@ -39,7 +42,8 @@ const Post: React.FC<PostProps> = ({ post }) => {
     staleTime: 1000 * 60 * 5,
   });
 
-  const mutation = useMutation({
+  // Like/Unlike Mutation
+  const likeMutation = useMutation({
     mutationFn: async (liked: boolean) => {
       if (liked) {
         return await makeRequest.delete(`/like?postid=${post.id}`);
@@ -51,8 +55,28 @@ const Post: React.FC<PostProps> = ({ post }) => {
     },
   });
 
+  // 🔹 Delete Post Mutation
+  const deleteMutation = useMutation({
+    mutationFn: async () => {
+      await makeRequest.delete(`/post/${post.id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] }); // refresh post feed
+      setMenuOpen(false);
+    },
+  });
+
+  // Like Handler
   const handleLike = () => {
-    mutation.mutate(likes.includes(currentUser?.id));
+    likeMutation.mutate(likes.includes(currentUser?.id));
+  };
+
+  // 🔹 Delete Handler
+  const handleDelete = () => {
+    const confirmed = window.confirm("Are you sure you want to delete this post?");
+    if (confirmed) {
+      deleteMutation.mutate();
+    }
   };
 
   return (
@@ -62,8 +86,8 @@ const Post: React.FC<PostProps> = ({ post }) => {
           <div className="userInfo">
             <img
               src={
-                currentUser?.profilePic
-                  ? currentUser.profilePic
+                post?.users?.profilePic
+                  ? post.users.profilePic
                   : "/uploads/boy.png"
               }
               alt={post?.users?.name}
@@ -78,7 +102,27 @@ const Post: React.FC<PostProps> = ({ post }) => {
               <span className="date">{moment(post.createdAt).fromNow()}</span>
             </div>
           </div>
-          <MoreHorizIcon />
+
+          {/* 🔹 Dropdown toggle */}
+          <div className="menuWrapper">
+            <MoreHorizIcon
+              className="menuIcon"
+              onClick={() => setMenuOpen((prev) => !prev)}
+            />
+            {menuOpen && (
+              <div className="dropdown">
+                {post.users?.id === currentUser?.id && (
+                  <button
+                    className="deleteBtn"
+                    onClick={handleDelete}
+                    disabled={deleteMutation.isPending}
+                  >
+                    {deleteMutation.isPending ? "Deleting..." : "Delete Post"}
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="content">
