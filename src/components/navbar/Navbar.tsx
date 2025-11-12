@@ -61,7 +61,7 @@ const Navbar: React.FC = () => {
     <div className="navbar">
       <div className="left">
         <Link to="/" style={{ textDecoration: "none" }}>
-          <span className="logo">lamasocial</span>
+          <span className="logo">TRENDS</span>
         </Link>
         <HomeOutlinedIcon aria-label="Home" />
         {darkMode ? (
