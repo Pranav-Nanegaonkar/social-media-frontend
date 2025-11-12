@@ -69,8 +69,8 @@ const Comments: React.FC<commentProps> = ({ postId }) => {
             <div className="comment" key={comment.id}>
               <img
                 src={
-                  currentUser?.profilePic
-                    ? currentUser.profilePic
+                  comment?.users?.profilePic
+                    ? comment?.users?.profilePic
                     : "/uploads/boy.png"
                 }
                 alt="comment"
